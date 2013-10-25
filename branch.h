@@ -271,6 +271,10 @@ public:
             text.erase(0, index);
 
         int i = text.find_first_of(style.delim_start, 0);
+
+        if (i < 0)
+            return -1;
+
         int nest = 0;
         for (; i < text.size(); i++) {
             char c = text.at(i);
