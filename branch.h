@@ -111,6 +111,20 @@ public:
         return _child.size();
     }
 
+    branch* child(std::string tag)
+    {
+        if (!_child.size())
+            return NULL;
+
+        std::vector<branch*>::iterator it = _child.begin();
+        for (; it != _child.end(); it++) {
+            if (tag == (*it)->tag)
+                return *it;
+        }
+
+        return NULL;
+    }
+
 public:
 
     std::string to_s(void)

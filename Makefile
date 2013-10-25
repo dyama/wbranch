@@ -14,5 +14,13 @@ all: $(OBJ)
 
 .PHONY: clean
 clean:
-	-rm -f $(PROGRAM) $(OBJ)
+	-rm -f $(PROGRAM) $(OBJ) *.h.gch
+
+.PHONY: run
+run: all
+	./$(PROGRAM)
+
+.PHONY: debug
+debug: all
+	cgdb ./$(PROGRAM)
 

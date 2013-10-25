@@ -7,35 +7,49 @@
 
 #include "wbranch.h"
 
+using namespace std;
+
 int main(int argc, char** argv)
 {
-    std::locale::global(std::locale(""));
+    // you can call these locale setting functions which you like.
+    locale::global(locale(""));
     //setlocale(LC_CTYPE, "");
 
-    wbranch a(L"太郎", L"Aaaa");
-    wbranch b(L"花子",L"Bbba");
+    // root object
+    wbranch family(L"山田");
 
-    wbranch c(L"classA", &a);
-    c.add(&b);
+        // add 2 children
 
-    std::wstring text = L"test{foo{hoge}bar{fuga{baz{piyo}}}}";
+        wbranch child1(L"太郎", L"A型");
+        family.add(&child1);
 
+        wbranch child2(L"花子", L"B型");
+        family.add(&child2);
+
+    // style of serialization
     wbranchstyle style;
+    style.tabsize = 2;
     style.output_indent = true;
     style.output_newline = true;
 
-    std::wcout << L"org:" << std::endl
-        << c.to_s(style).c_str() << std::endl;
+    wcout << L"original:" << endl << family.to_s(style).c_str()
+        << endl << endl;
 
-    wbranch* n = wbranch::from_s(c.to_s(style), style);
+    // from_s() requires the same style that to_s() used.
+    wbranch* n = wbranch::from_s(family.to_s(style), style);
 
+    // you can change the style after loading.
     style.output_indent = false;
     style.output_newline = false;
 
-    //wprintf(L"converted:\n%s\n", n->to_s(style).c_str());
+    // this output string formatted by new style
+    wcout << L"ressult:" << endl << n->to_s(style).c_str() << endl << endl;
 
-    std::wcout << L"res:" << std::endl
-        << n->to_s(style).c_str() << std::endl;
+    // get child by tag name
+    wbranch* child = family.child(L"太郎");
+    if (child != NULL)
+        wcout << family.tag.c_str() << child->tag.c_str() << L"は"
+            << child->value.c_str() << endl;
 
     return 0;
 }

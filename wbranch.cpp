@@ -88,6 +88,20 @@ int wbranch::size(void)
     return _child.size();
 }
 
+wbranch* wbranch::child(std::wstring tag)
+{
+    if (!_child.size())
+        return NULL;
+
+    std::vector<wbranch*>::iterator it = _child.begin();
+    for (; it != _child.end(); it++) {
+        if (tag == (*it)->tag)
+            return *it;
+    }
+
+    return NULL;
+}
+
 std::wstring wbranch::to_s(void)
 {
     int nest = 0;

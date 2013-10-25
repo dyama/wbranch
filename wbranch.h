@@ -33,6 +33,8 @@ public:
     void clear(void);
     int size(void);
 
+    wbranch* child(std::wstring tag);
+
 public:
 
     std::wstring to_s(void);
