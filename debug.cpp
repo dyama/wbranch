@@ -51,6 +51,25 @@ int main(int argc, char** argv)
         wcout << family.tag.c_str() << child->tag.c_str() << L"は"
             << child->value.c_str() << endl;
 
+    // get child by path string
+    wbranch filesystem(L"/");
+    wbranch dirA(L"dirA");
+    wbranch dirB(L"dirB");
+    wbranch fileA(L"fileA");
+    wbranch fileB(L"fileB");
+
+    filesystem.add(&dirA);
+    dirA.add(&dirB);
+    dirB.add(&fileA);
+    dirB.add(&fileB);
+
+    fileA.value = L"foo";
+    fileB.value = L"bar";
+
+    wbranch* myfile = filesystem.path(L"dirA/dirB/fileA");
+    wcout << L"fileA: " << endl;
+    wcout << myfile->value.c_str() << endl;
+
     return 0;
 }
 

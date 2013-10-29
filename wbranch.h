@@ -6,21 +6,26 @@
 
 #include "wbranchstyle.h"
 
+using namespace std;
+
 class wbranch
 {
 
 protected:
-    std::vector<wbranch*> _child;
+    vector<wbranch*> _child;
 
 public:
-    std::wstring tag;
-    std::wstring value;
+    wstring tag;
+    wstring value;
+
+    // separator for path
+    wchar_t separator;
 
 public: /* Constractor, Destractor */
-    wbranch(std::wstring atag);
-    wbranch(std::wstring atag, std::wstring avalue);
-    wbranch(std::wstring atag, std::vector<wbranch*> achildren);
-    wbranch(std::wstring atag, wbranch* achild);
+    wbranch(wstring atag);
+    wbranch(wstring atag, wstring avalue);
+    wbranch(wstring atag, vector<wbranch*> achildren);
+    wbranch(wstring atag, wbranch* achild);
     wbranch(const wchar_t* atag);
     wbranch(const wchar_t* atag, const wchar_t* avalue);
     wbranch(const wchar_t* atag, wbranch* achild);
@@ -28,26 +33,31 @@ public: /* Constractor, Destractor */
     void destroy();
 
 public:
-    wbranch* operator[](int index);
-    void add(wbranch* achild);
-    void clear(void);
-    int size(void);
 
-    wbranch* child(std::wstring tag);
+    wbranch*    operator[](int index);
+    void        add(wbranch* achild);
+    void        clear(void);
+    int         size(void);
+
+    wbranch*         child(wstring tag);
+    vector<wbranch*> children(wstring filter);
+
+    wbranch*    path(wstring path);
+    wbranch*    path(vector<wstring> path);
 
 public:
 
-    std::wstring to_s(void);
-    std::wstring to_s(wbranchstyle style);
-    std::wstring to_s(wbranchstyle style, int nest_max);
-    static wbranch* from_s(std::wstring text, wbranchstyle style);
-    static int get_max_nest(std::wstring text, wbranchstyle style);
-    static bool isvalid(std::wstring text, wbranchstyle style);
-    static int get_item_string(std::wstring text, wbranchstyle style, int index, std::wstring* result);
+    wstring     to_s(void);
+    wstring     to_s(wbranchstyle style);
+    wstring     to_s(wbranchstyle style, int nest_max);
+    static      wbranch* from_s(wstring text, wbranchstyle style);
+    static int  get_max_nest(wstring text, wbranchstyle style);
+    static bool isvalid(wstring text, wbranchstyle style);
+    static int  get_item_string(wstring text, wbranchstyle style, int index, wstring* result);
 
 protected:
 
-    std::wstring to_s(int& nest_current, int nest_max, wbranchstyle style);
+    wstring     to_s(int& nest_current, int nest_max, wbranchstyle style);
 
 };
 

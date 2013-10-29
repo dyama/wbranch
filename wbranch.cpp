@@ -1,51 +1,93 @@
 #include "wbranch.h"
+#include <iostream>
 
+using namespace std;
+
+/**
+ * \brief constracter
+ * \param atag tag name
+ */
 wbranch::wbranch(std::wstring atag)
 {
     tag = std::wstring(atag);
     value = std::wstring(L"");
+    separator = L'/';
     return;
 }
 
+/**
+ * \brief constracter
+ * \param atag tag name
+ * \param avalue value
+ */
 wbranch::wbranch(std::wstring atag, std::wstring avalue)
 {
     tag = std::wstring(atag);
     value = std::wstring(avalue);
+    separator = L'/';
     return;
 }
 
+/**
+ * \brief constracter
+ * \param atag tag name
+ * \param achildren references of children
+ */
 wbranch::wbranch(std::wstring atag, std::vector<wbranch*> achildren)
 {
     tag = std::wstring(atag);
     _child = std::vector<wbranch*>(achildren);
+    separator = L'/';
     return;
 }
 
+/**
+ * \brief constracter
+ * \param atag tag name
+ * \param achild reference to a child
+ */
 wbranch::wbranch(std::wstring atag, wbranch* achild)
 {
     tag = std::wstring(atag);
     _child.push_back(achild);
+    separator = L'/';
     return;
 }
 
+/**
+ * \brief constracter
+ * \param atag tag name
+ */
 wbranch::wbranch(const wchar_t* atag)
 {
     tag = std::wstring(atag);
     value = std::wstring(L"");
+    separator = L'/';
     return;
 }
 
+/**
+ * \brief constracter
+ * \param atag tag name
+ * \param avalue value
+ */
 wbranch::wbranch(const wchar_t* atag, const wchar_t* avalue)
 {
     tag = std::wstring(atag);
     value = std::wstring(avalue);
+    separator = L'/';
     return;
 }
 
+/**
+ * \brief constracter
+ * \param atag tag name
+ */
 wbranch::wbranch(const wchar_t* atag, wbranch* achild)
 {
     tag = std::wstring(atag);
     _child.push_back(achild);
+    separator = L'/';
     return;
 }
 
@@ -100,6 +142,44 @@ wbranch* wbranch::child(std::wstring tag)
     }
 
     return NULL;
+}
+
+vector<wbranch*> wbranch::children(wstring filter)
+{
+    return vector<wbranch*>();
+}
+
+wbranch* wbranch::path(wstring path)
+{
+    // split the path
+    vector<wstring> pathes;
+    wstring curpath;
+    for (int i=0; i<path.size(); i++) {
+        if (path.at(i) == this->separator) {
+            pathes.push_back(curpath);
+            curpath = L"";
+            continue;
+        }
+        curpath += path.at(i);
+    }
+    if (curpath.size())
+        pathes.push_back(curpath);
+
+    return this->path(pathes);
+}
+
+wbranch* wbranch::path(vector<wstring> path)
+{
+    if (!path.size())
+        return this;
+
+    wbranch* c = child(path.front());
+    if (!c)
+        return NULL;
+
+    path.erase(path.begin());
+
+    return c->path(path);
 }
 
 std::wstring wbranch::to_s(void)
